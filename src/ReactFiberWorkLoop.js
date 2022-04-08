@@ -32,6 +32,9 @@ function workLoop(IdleDeadline) {
   while (wip && IdleDeadline.timeRemaining() > 0) {
     performUnitOfWork();
   }
+  if(wip) {
+    window.requestIdleCallback(workLoop)
+  }
   if (!wip && wipRoot) {
     commitRoot()
   }
