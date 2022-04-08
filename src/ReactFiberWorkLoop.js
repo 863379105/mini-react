@@ -17,7 +17,6 @@ function performUnitOfWork() {
     wip = wip.child;
     return;
   }
-
   let next = wip;
   while (next) {
     if (next.sibling) {
@@ -31,7 +30,6 @@ function performUnitOfWork() {
 
 function workLoop(IdleDeadline) {
   while (wip && IdleDeadline.timeRemaining() > 0) {
-    console.log(IdleDeadline.timeRemaining());
     performUnitOfWork();
   }
   if (!wip && wipRoot) {
@@ -40,7 +38,6 @@ function workLoop(IdleDeadline) {
 }
 
 function commitRoot() {
-  console.log(wipRoot);
   commitWorker(wipRoot);
   wipRoot = null;
 }

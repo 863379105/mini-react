@@ -17,7 +17,6 @@ function  reconcilerChildren(wip, children) {
   for (let i = 0; i < newChildren.length; i++) {
     const newChild = newChildren[i];
     const newFiber = createFiber(newChild, wip);
-    // reconcilerChildren(newFiber,newChild.props.children)
     if (i === 0) {
       wip.child = newFiber;
     } else {
