@@ -1,4 +1,5 @@
 import { updateHostComponent } from "./ReactFiberReconciler";
+import { isString, Placement } from "./utils";
 
 let wip = null;
 let wipRoot = null;
@@ -10,7 +11,7 @@ export function schedulerUpdateOnFiber(fiber) {
 
 function performUnitOfWork() {
   const {type} = wip;
-  if (typeof type === 'string') {
+  if (isString(type)) {
     updateHostComponent(wip);
   }
   if (wip.child) {
@@ -50,7 +51,7 @@ function commitWorker(wip) {
   // 1. update self
   const { flags, stateNode } = wip;
   let parentNode = wip.return.stateNode;
-  if(flags === 'Placement' && stateNode) {
+  if(flags === Placement && stateNode) {
     parentNode.appendChild(stateNode)
   }
   // 2. update child
