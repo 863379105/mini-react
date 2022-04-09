@@ -36,3 +36,11 @@ export function updateFunctionComponet(wip) {
   
   reconcilerChildren(children, wip);
 }
+
+export function updateClassComponet(wip) {
+  const { type, props } = wip;
+  const instance = new type(props)
+  let children = instance.render();
+
+  reconcilerChildren(children, wip);
+}

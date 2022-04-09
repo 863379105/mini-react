@@ -1,4 +1,4 @@
-import { updateFunctionComponet, updateHostComponent } from "./ReactFiberReconciler";
+import { updateClassComponet, updateFunctionComponet, updateHostComponent } from "./ReactFiberReconciler";
 import { isFn, isString, Placement } from "./utils";
 
 let wip = null;
@@ -14,7 +14,7 @@ function performUnitOfWork() {
   if (isString(type)) {
     updateHostComponent(wip);
   } else if (isFn(type)) {
-    updateFunctionComponet(wip)
+    type.prototype.isReactClassComponent ? updateClassComponet(wip) : updateFunctionComponet(wip)
   }
   if (wip.child) {
     wip = wip.child;
@@ -39,7 +39,6 @@ function workLoop(IdleDeadline) {
     window.requestIdleCallback(workLoop)
   }
   if (!wip && wipRoot) {
-    console.log(wipRoot);
     commitRoot()
   }
 }
