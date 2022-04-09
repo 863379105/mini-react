@@ -4,7 +4,7 @@ export function createFiber(vdom, returnFiber) {
   let fiber = {
     child: null,
     sibling: null,
-    stageNode: null,
+    stateNode: null,
     index: null,
     return: returnFiber,
 
