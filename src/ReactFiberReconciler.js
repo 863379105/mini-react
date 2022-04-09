@@ -9,8 +9,7 @@ export function updateHostComponent(wip) {
   wip.stateNode = document.createElement(wip.type)
   Object.keys(wip.props).map(key => {
     if (key === 'children') {
-      const children = isArray(wip.props[key]) ? wip.props[key] : [wip.props[key]];
-      reconcilerChildren(children,wip)
+      reconcilerChildren(wip.props[key], wip);
     } else {
       wip.stateNode[key] = wip.props[key];
     }
@@ -18,6 +17,7 @@ export function updateHostComponent(wip) {
 }
 
 function reconcilerChildren(children,parent) {
+  children = isArray(children) ? children : [children];
   let previousNewFiber = null;
   children.map((child,index) => {
     const newFiber = createFiber(child,parent);
@@ -28,4 +28,11 @@ function reconcilerChildren(children,parent) {
     }
     previousNewFiber = newFiber;
   })
+}
+
+export function updateFunctionComponet(wip) {
+  const { type,props } = wip;
+  let children = type(props);
+  
+  reconcilerChildren(children, wip);
 }
