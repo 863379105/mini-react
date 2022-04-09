@@ -1,21 +1,30 @@
-export function createFiber(vnode,returnFiber) {
-  const fiber = {
-    type: vnode.type,
-    key: vnode.key,
-    props: vnode.props,
-    // 对应的当前 dom 
-    stateNode: null,
+import { isString, Placement } from "./utils";
 
-    // fiber 的第一个子节点
+export function createFiber(vdom, returnFiber) {
+  let fiber = {
     child: null,
-    // fiber 的兄弟节点
     sibling: null,
-    // fiber 的父节点
+    stageNode: null,
+    index: null,
     return: returnFiber,
 
-    // 标记 fiber 的类型
-    flags: 'Placement',
-    index: null
+    flags: Placement,
   }
-  return fiber
+  if (isString(vdom)) {
+    fiber = {
+      ...fiber,
+      type: 'text',
+      value: vdom,
+      key: null,
+    }
+  } else {
+    fiber = {
+      ...fiber,
+      type: vdom.type,
+      key: vdom.key,
+      props: vdom.props,
+    }
+  }
+  
+  return fiber;
 }
