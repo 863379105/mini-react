@@ -1,4 +1,4 @@
-import { ReactDom } from '../which-react';
+import { ReactDom, Component } from '../which-react';
 import './index.css'
 
 function FunctionComponent(props) {
@@ -9,6 +9,17 @@ function FunctionComponent(props) {
       <p>{des}</p>
     </div>
   )
+}
+
+class ClassComponent extends Component {
+  render() {
+    return (
+      <div>
+        <h1>ClassComponent</h1>
+        <p>{this.props.des}</p>
+      </div>
+    )
+  }
 }
 
 const jsx =  (
@@ -22,10 +33,8 @@ const jsx =  (
       <h1>vue</h1>
       <p>this is p2</p>
     </div>
-    <FunctionComponent des={'This is a Function Component'}></FunctionComponent>
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <FunctionComponent des={'This is a Function Component'} />
+    <ClassComponent des={'This is a Class Component'} />
   </div>
 );
 
