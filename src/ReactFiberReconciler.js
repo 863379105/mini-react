@@ -44,3 +44,5 @@ export function updateClassComponet(wip) {
 
   reconcilerChildren(children, wip);
 }
+
+//TODO: TextComponent FragmentComponent

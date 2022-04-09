@@ -11,6 +11,7 @@ export function schedulerUpdateOnFiber(fiber) {
 
 function performUnitOfWork() {
   const {type} = wip;
+  //TODO: switch
   if (isString(type)) {
     updateHostComponent(wip);
   } else if (isFn(type)) {
