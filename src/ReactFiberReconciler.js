@@ -1,27 +1,31 @@
 import { createFiber } from "./ReactFiber";
-import { isArray, isStringOrNumber, updateNode } from "./utils";
+import { isArray } from "./utils";
+
 export function updateHostComponent(wip) {
-  if (wip) {
-    wip.stateNode = document.createElement(wip.type);
-    updateNode(wip.stateNode, wip.props);
-  }
-  reconcilerChildren(wip, wip.props.children)
+  if (wip.type === 'text') {
+    wip.stateNode = document.createTextNode(wip.value);
+    return;
+  };
+  wip.stateNode = document.createElement(wip.type)
+  Object.keys(wip.props).map(key => {
+    if (key === 'children') {
+      const children = isArray(wip.props[key]) ? wip.props[key] : [wip.props[key]];
+      reconcilerChildren(children,wip)
+    } else {
+      wip.stateNode[key] = wip.props[key];
+    }
+  })
 }
 
-function  reconcilerChildren(wip, children) {
-  if(isStringOrNumber(children)) {
-    return;
-  }
-  const newChildren = isArray(children) ? children : [children];
+function reconcilerChildren(children,parent) {
   let previousNewFiber = null;
-  for (let i = 0; i < newChildren.length; i++) {
-    const newChild = newChildren[i];
-    const newFiber = createFiber(newChild, wip);
-    if (i === 0) {
-      wip.child = newFiber;
+  children.map((child,index) => {
+    const newFiber = createFiber(child,parent);
+    if (index == 0) {
+      parent.child = newFiber;
     } else {
       previousNewFiber.sibling = newFiber;
     }
     previousNewFiber = newFiber;
-  }
+  })
 }
