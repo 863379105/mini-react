@@ -1,10 +1,10 @@
-import React from 'react'
+import {Component} from '../src/React'
 // import ReactDom from 'react-dom/client'
 
 
 import ReactDom from '../src/react-dom'
 
 export {
-  React,
+  Component,
   ReactDom
 }
