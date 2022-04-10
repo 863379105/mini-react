@@ -28,7 +28,6 @@ export function updateClassComponet(wip) {
 export function updateHostTextComponent(wip) {
   wip.stateNode = document.createTextNode(wip.props.children);
 }
-//TODO: FragmentComponent
 
 export function updateFragmentComponent(wip) {
   reconcilerChildren(wip.props.children, wip);
