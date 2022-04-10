@@ -27,14 +27,18 @@ const jsx =  (
     <div>
       <h1>react</h1>
       <a href="https://github.com/bubucuo/mini-react">mini react</a>
-      <p>this is p</p>
+      <p>this is react</p>
     </div>
     <div>
       <h1>vue</h1>
-      <p>this is p2</p>
+      <p>this is vue</p>
     </div>
     <FunctionComponent des={'This is a Function Component'} />
     <ClassComponent des={'This is a Class Component'} />
+    <>
+      <h1>FragmentComponent</h1>
+      <p>this is Fragment Component</p>
+    </>
   </div>
 );
 

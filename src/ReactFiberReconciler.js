@@ -25,11 +25,14 @@ export function updateClassComponet(wip) {
   reconcilerChildren(children, wip);
 }
 
-export function updateHostText(wip) {
-  console.log(wip);
+export function updateHostTextComponent(wip) {
   wip.stateNode = document.createTextNode(wip.props.children);
 }
 //TODO: FragmentComponent
+
+export function updateFragmentComponent(wip) {
+  reconcilerChildren(wip.props.children, wip);
+}
 
 function reconcilerChildren(children,parent) {
   children = isArray(children) ? children : [children];

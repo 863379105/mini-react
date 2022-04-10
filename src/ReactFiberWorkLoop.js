@@ -1,4 +1,10 @@
-import { updateClassComponet, updateFunctionComponet, updateHostComponent, updateHostText } from "./ReactFiberReconciler";
+import {
+  updateClassComponet,
+  updateFragmentComponent,
+  updateFunctionComponet,
+  updateHostComponent,
+  updateHostTextComponent
+} from "./ReactFiberReconciler";
 import { Placement } from "./utils";
 import {
   ClassComponent,
@@ -29,7 +35,10 @@ function performUnitOfWork() {
       updateClassComponet(wip);
       break;
     case HostText:
-      updateHostText(wip);
+      updateHostTextComponent(wip);
+      break;
+    case Fragment:
+      updateFragmentComponent(wip)
       break;
     default:
       break;
