@@ -1,5 +1,12 @@
-import { updateClassComponet, updateFunctionComponet, updateHostComponent } from "./ReactFiberReconciler";
-import { isFn, isString, Placement } from "./utils";
+import { updateClassComponet, updateFunctionComponet, updateHostComponent, updateHostText } from "./ReactFiberReconciler";
+import { Placement } from "./utils";
+import {
+  ClassComponent,
+  Fragment,
+  FunctionComponent,
+  HostComponent,
+  HostText,
+} from "./ReactWorkTags";
 
 let wip = null;
 let wipRoot = null;
@@ -10,12 +17,22 @@ export function schedulerUpdateOnFiber(fiber) {
 }
 
 function performUnitOfWork() {
-  const {type} = wip;
-  //TODO: switch
-  if (isString(type)) {
-    updateHostComponent(wip);
-  } else if (isFn(type)) {
-    type.prototype.isReactClassComponent ? updateClassComponet(wip) : updateFunctionComponet(wip)
+  const { tag } = wip;
+  switch(tag) {
+    case HostComponent:
+      updateHostComponent(wip);
+      break;
+    case FunctionComponent: 
+      updateFunctionComponet(wip);
+      break;
+    case ClassComponent:
+      updateClassComponet(wip);
+      break;
+    case HostText:
+      updateHostText(wip);
+      break;
+    default:
+      break;
   }
   if (wip.child) {
     wip = wip.child;
