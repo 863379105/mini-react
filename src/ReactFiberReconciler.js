@@ -1,3 +1,4 @@
+import { renderWithHooks } from "./hooks";
 import { createFiber } from "./ReactFiber";
 import { isArray } from "./utils";
 
@@ -6,6 +7,9 @@ export function updateHostComponent(wip) {
   Object.keys(wip.props).map(key => {
     if (key === 'children') {
       reconcilerChildren(wip.props[key], wip);
+    } else if (key.slice(0,2) === 'on') {
+      const eventName = key.slice(2).toLocaleLowerCase();
+      wip.stateNode.addEventListener(eventName,wip.props[key])
     } else {
       wip.stateNode[key] = wip.props[key];
     }
