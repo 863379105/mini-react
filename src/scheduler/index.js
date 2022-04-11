@@ -31,8 +31,14 @@ export function scheduleCallback(callback) {
   }
 }
 
-//TODO: 未设置宏任务
 function requestHostCallback() {
+  port.postMessage(null);
+}
+
+// create js Task
+const channel = new MessageChannel();
+const port = channel.port2;
+channel.port1.onmessage = function() {
   let currentTask = peek(taskQueue);
   while(currentTask) {
     const callback = currentTask.callback;
