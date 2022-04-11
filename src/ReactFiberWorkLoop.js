@@ -13,6 +13,7 @@ import {
   HostComponent,
   HostText,
 } from "./ReactWorkTags";
+import { scheduleCallback } from "./scheduler";
 
 let wip = null;
 let wipRoot = null;
@@ -20,6 +21,7 @@ let wipRoot = null;
 export function schedulerUpdateOnFiber(fiber) {
   wip = fiber;
   wipRoot = fiber;
+  scheduleCallback(workLoop);
 }
 
 function performUnitOfWork() {
@@ -58,13 +60,13 @@ function performUnitOfWork() {
   wip = null;
 }
 
-function workLoop(IdleDeadline) {
-  while (wip && IdleDeadline.timeRemaining() > 0) {
+function workLoop() {
+  while (wip) {
     performUnitOfWork();
   }
-  if(wip) {
-    window.requestIdleCallback(workLoop)
-  }
+  // if(wip) {
+  //   window.requestIdleCallback(workLoop)
+  // }
   if (!wip && wipRoot) {
     commitRoot()
   }
@@ -96,5 +98,3 @@ function  getParentNode(wip) {
   }
   return p.return.stateNode;
 }
-
-window.requestIdleCallback(workLoop)
