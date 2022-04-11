@@ -18,6 +18,8 @@ export function createFiber(vdom, returnFiber) {
     index: null,
     return: returnFiber,
     flags: Placement,
+
+    alternate: null
   }
 
   const {type} = vdom;
