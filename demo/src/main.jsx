@@ -1,12 +1,15 @@
-import { ReactDom, Component } from '../which-react';
+// import { useState } from 'react';
+import { ReactDom, Component, useReducer } from '../which-react';
 import './index.css'
 
 function FunctionComponent(props) {
   const { des } = props
+  let [counter,setCounter] = useReducer((x)=>{x+1},0)
   return (
     <div>
       <h1>FunctionComponent</h1>
       <p>{des}</p>
+      <button onClick={() => {setCounter()}}>add:{counter}</button>
     </div>
   )
 }

@@ -1,3 +1,3 @@
 import { Component } from "./ClassComponent";
-
-export { Component };
+import { useReducer } from "./hooks";
+export { Component,useReducer };

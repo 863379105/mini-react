@@ -1,10 +1,9 @@
-import {Component} from '../src/React'
-// import ReactDom from 'react-dom/client'
 
-
+import { Component, useReducer } from '../src/React'
 import ReactDom from '../src/react-dom'
 
 export {
   Component,
-  ReactDom
+  ReactDom,
+  useReducer
 }
