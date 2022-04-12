@@ -17,6 +17,7 @@ export function updateHostComponent(wip) {
 }
 
 export function updateFunctionComponet(wip) {
+  renderWithHooks(wip)
   const { type,props } = wip;
   let children = type(props);
   reconcilerChildren(children, wip);

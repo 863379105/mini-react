@@ -27,9 +27,16 @@ function updateWorkInProgressHook() {
 }
 
 export function useReducer(reducer,initialState) {
-  const dispatch = function() {
-    console.log('ddd');
+  const hook = updateWorkInProgressHook();
+  if(!currentlyRenderingFiber.alternate) {
+    hook.memoizedState = initialState;
   }
+
+
+  const dispatch = function(action) {
+    const newState = reducer(hook.memoizedState,action)
+  }
+
   return [
     initialState,
     dispatch

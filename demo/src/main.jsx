@@ -2,14 +2,36 @@
 import { ReactDom, Component, useReducer } from '../which-react';
 import './index.css'
 
+const initState = {
+  counter: 0,
+  show: true
+}
+const reducer = function(state, action) {
+  const newState = { ...state };
+
+  switch(action.type) {
+    case 'addCounter':
+      newState.counter += 1;
+      break;
+    default:
+      break;
+  }
+
+  return newState;
+}
 function FunctionComponent(props) {
   const { des } = props
-  let [counter,setCounter] = useReducer((x)=>{x+1},0)
+  let [state,dispatch] = useReducer(reducer, initState)
+
+  const addCounter = function() {
+    dispatch({type: 'addCounter'})
+  }
+
   return (
     <div>
       <h1>FunctionComponent</h1>
       <p>{des}</p>
-      <button onClick={() => {setCounter()}}>add:{counter}</button>
+      <button onClick={addCounter}>add:{state.counter}</button>
     </div>
   )
 }
