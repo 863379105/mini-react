@@ -1,6 +1,6 @@
 import { renderWithHooks } from "./hooks";
 import { createFiber } from "./ReactFiber";
-import { isArray } from "./utils";
+import { isArray, Update } from "./utils";
 
 export function updateHostComponent(wip) {
   wip.stateNode = document.createElement(wip.type)
@@ -40,9 +40,25 @@ export function updateFragmentComponent(wip) {
 
 function reconcilerChildren(children,parent) {
   children = isArray(children) ? children : [children];
+  
+  let oldFiber = parent.alternate && parent.alternate.child;
+
   let previousNewFiber = null;
   children.map((child,index) => {
     const newFiber = createFiber(child,parent);
+    //TODO: diff 比较
+    const same = sameNode(newFiber,oldFiber)
+    if (same) {
+      Object.assign(newFiber, {
+        stateNode: oldFiber.stateNode,
+        alternate: oldFiber,
+        flags: Update
+      })
+    }
+    if (oldFiber) {
+      oldFiber = oldFiber.sibling;
+    }
+
     if (index == 0) {
       parent.child = newFiber;
     } else {
@@ -50,4 +66,8 @@ function reconcilerChildren(children,parent) {
     }
     previousNewFiber = newFiber;
   })
+}
+
+function sameNode(a,b) {
+  return a && b && a.type === b.type && a.key === b.key
 }

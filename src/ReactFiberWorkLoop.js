@@ -5,7 +5,7 @@ import {
   updateHostComponent,
   updateHostTextComponent
 } from "./ReactFiberReconciler";
-import { Placement } from "./utils";
+import { Placement, Update, isStringOrNumber } from "./utils";
 import {
   ClassComponent,
   Fragment,
@@ -82,8 +82,21 @@ function commitWorker(wip) {
   // 1. update self
   const { flags, stateNode } = wip;
   let parentNode = getParentNode(wip);
-  if(flags === Placement && stateNode) {
+  if(flags & Placement && stateNode) {
     parentNode.appendChild(stateNode)
+  }
+  if (flags & Update && stateNode) {
+    //TODO: update node
+    console.log("wip", wip);
+    Object.keys(wip.props).forEach((k) => {
+      if (k === "children") {
+        if (isStringOrNumber(wip.props[k])) {
+          stateNode.textContent = wip.props[k];
+        }
+      } else {
+        stateNode[k] = wip.props[k];
+      }
+    });
   }
   // 2. update child
   commitWorker(wip.child);

@@ -1,26 +1,34 @@
+import { schedulerUpdateOnFiber } from "../src/ReactFiberWorkLoop";
+
 let currentlyRenderingFiber = null;
 let workInProgressHook = null;
 
 export function renderWithHooks(wip) {
   currentlyRenderingFiber = wip;
-  currentlyRenderingFiber.memoizedState = null;
+  currentlyRenderingFiber.memorizedState = null;
+  workInProgressHook = null;
 }
-
 function updateWorkInProgressHook() {
   let hook;
   const current = currentlyRenderingFiber.alternate;
   if(current) {
     // update component
+    currentlyRenderingFiber.memorizedState = current.memorizedState;
+    if (workInProgressHook) {
+      workInProgressHook = hook = workInProgressHook.next;
+    } else {
+      workInProgressHook = hook = currentlyRenderingFiber.memorizedState;
+    }
   } else {
     // init
     hook = {
-      memoizedState: null,
+      memorizedState: null,
       next: null
     }
     if(workInProgressHook) {
       workInProgressHook = workInProgressHook.next = hook
     } else {
-      workInProgressHook = currentlyRenderingFiber.memoizedState = hook;
+      workInProgressHook = currentlyRenderingFiber.memorizedState = hook;
     }
   }
   return hook;
@@ -29,16 +37,18 @@ function updateWorkInProgressHook() {
 export function useReducer(reducer,initialState) {
   const hook = updateWorkInProgressHook();
   if(!currentlyRenderingFiber.alternate) {
-    hook.memoizedState = initialState;
+    hook.memorizedState = initialState;
   }
 
 
   const dispatch = function(action) {
-    const newState = reducer(hook.memoizedState,action)
+    hook.memorizedState = reducer ? reducer(hook.memorizedState,action) : action
+    currentlyRenderingFiber.alternate = { ...currentlyRenderingFiber };
+    currentlyRenderingFiber.sibling = null;
+    schedulerUpdateOnFiber(currentlyRenderingFiber);
   }
-
   return [
-    initialState,
+    hook.memorizedState,
     dispatch
   ]
 }
