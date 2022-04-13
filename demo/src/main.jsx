@@ -13,6 +13,9 @@ const reducer = function(state, action) {
     case 'addCounter':
       newState.counter += 1;
       break;
+    case 'changeShow':
+      newState.show = !newState.show;
+      break
     default:
       break;
   }
@@ -23,15 +26,18 @@ function FunctionComponent(props) {
   const { des } = props
   let [state,dispatch] = useReducer(reducer, initState)
 
+  const changeShow = function() {
+    dispatch({type: 'changeShow'})
+  }
   const addCounter = function() {
     dispatch({type: 'addCounter'})
   }
-
   return (
     <div>
-      <h1>FunctionComponent</h1>
+      <h1 className={state.show ? 'font-bg-red' : 'font-bg-blue'}>FunctionComponent</h1>
       <p>{des}</p>
-      <button onClick={addCounter}>add:{state.counter}</button>
+      <button onClick={changeShow}>changeShow</button>
+      <button onClick={addCounter}>{state.counter}</button>
     </div>
   )
 }

@@ -2,3 +2,10 @@
   border: 1px green solid;
   padding: 20px;
 }
+
+.font-bg-red {
+  color: red;
+}
+.font-bg-blue {
+  color: blue;
+}
