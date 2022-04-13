@@ -8,6 +8,7 @@ export function renderWithHooks(wip) {
   currentlyRenderingFiber.memorizedState = null;
   workInProgressHook = null;
 }
+
 function updateWorkInProgressHook() {
   let hook;
   const current = currentlyRenderingFiber.alternate;
@@ -39,8 +40,6 @@ export function useReducer(reducer,initialState) {
   if(!currentlyRenderingFiber.alternate) {
     hook.memorizedState = initialState;
   }
-
-
   const dispatch = function(action) {
     hook.memorizedState = reducer ? reducer(hook.memorizedState,action) : action
     currentlyRenderingFiber.alternate = { ...currentlyRenderingFiber };
