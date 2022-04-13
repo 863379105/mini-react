@@ -40,14 +40,18 @@ export function useReducer(reducer,initialState) {
   if(!currentlyRenderingFiber.alternate) {
     hook.memorizedState = initialState;
   }
-  const dispatch = function(action) {
-    hook.memorizedState = reducer ? reducer(hook.memorizedState,action) : action
-    currentlyRenderingFiber.alternate = { ...currentlyRenderingFiber };
-    currentlyRenderingFiber.sibling = null;
-    schedulerUpdateOnFiber(currentlyRenderingFiber);
-  }
+  const dispatch = dispatchReducerAction(currentlyRenderingFiber, hook, reducer)
   return [
     hook.memorizedState,
     dispatch
   ]
+}
+
+function dispatchReducerAction(fiber, hook, reducer) {
+  return function(action) {
+    hook.memorizedState = reducer ? reducer(hook.memorizedState, action) : action;
+    fiber.alternate = { ...fiber };
+    fiber.sibling = null;
+    schedulerUpdateOnFiber(fiber);
+  }
 }
