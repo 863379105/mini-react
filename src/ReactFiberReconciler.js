@@ -1,19 +1,24 @@
 import { renderWithHooks } from "./hooks";
 import { createFiber } from "./ReactFiber";
-import { isArray, Update } from "./utils";
+import { isArray, isStringOrNumber, Update } from "./utils";
 
 export function updateHostComponent(wip) {
-  wip.stateNode = document.createElement(wip.type)
-  Object.keys(wip.props).map(key => {
-    if (key === 'children') {
-      reconcilerChildren(wip.props[key], wip);
-    } else if (key.slice(0,2) === 'on') {
-      const eventName = key.slice(2).toLocaleLowerCase();
-      wip.stateNode.addEventListener(eventName,wip.props[key])
-    } else {
-      wip.stateNode[key] = wip.props[key];
-    }
-  })
+  if (!wip.stateNode) {
+    wip.stateNode = document.createElement(wip.type)
+    Object.keys(wip.props).map(key => {
+      if (key === 'children') {
+        if (isStringOrNumber(wip.props[key])) {
+          wip.stateNode.textContent = wip.props[key] + '';
+        }
+      } else if (key.slice(0,2) === 'on') {
+        const eventName = key.slice(2).toLocaleLowerCase();
+        wip.stateNode.addEventListener(eventName,wip.props[key])
+      } else {
+        wip.stateNode[key] = wip.props[key];
+      }
+    })
+  }
+  reconcilerChildren(wip.props.children, wip);
 }
 
 export function updateFunctionComponet(wip) {
@@ -39,6 +44,9 @@ export function updateFragmentComponent(wip) {
 }
 
 function reconcilerChildren(children,parent) {
+  if (isStringOrNumber(children)) {
+    return;
+  }
   children = isArray(children) ? children : [children];
   
   let oldFiber = parent.alternate && parent.alternate.child;

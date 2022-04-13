@@ -80,23 +80,26 @@ function commitRoot() {
 function commitWorker(wip) {
   if (!wip) return;
   // 1. update self
-  const { flags, stateNode } = wip;
+  const { flags, stateNode, props } = wip;
   let parentNode = getParentNode(wip);
-  if(flags & Placement && stateNode) {
+  if (flags & Placement && stateNode) {
     parentNode.appendChild(stateNode)
   }
   if (flags & Update && stateNode) {
     //TODO: update node
-    console.log("wip", wip);
-    Object.keys(wip.props).forEach((k) => {
-      if (k === "children") {
-        if (isStringOrNumber(wip.props[k])) {
-          stateNode.textContent = wip.props[k];
+    Object.keys(props).map(key => {
+      //FIXED: event
+      if (key === 'children') {
+        if (isStringOrNumber(props[key])) {
+          stateNode.textContent = props[key] + '';
         }
+      } else if (key.slice(0,2) === 'on') {
+        // const eventName = key.slice(2).toLocaleLowerCase()
+        // stateNode.addEventListener(eventName,props[key])
       } else {
-        stateNode[k] = wip.props[k];
+        stateNode[key] = props[key];
       }
-    });
+    })
   }
   // 2. update child
   commitWorker(wip.child);
