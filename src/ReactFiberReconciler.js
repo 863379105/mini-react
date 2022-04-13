@@ -1,22 +1,11 @@
 import { renderWithHooks } from "./hooks";
 import { createFiber } from "./ReactFiber";
-import { isArray, isStringOrNumber, Update } from "./utils";
+import { isArray, isStringOrNumber, Update, updateNode } from "./utils";
 
 export function updateHostComponent(wip) {
   if (!wip.stateNode) {
     wip.stateNode = document.createElement(wip.type)
-    Object.keys(wip.props).map(key => {
-      if (key === 'children') {
-        if (isStringOrNumber(wip.props[key])) {
-          wip.stateNode.textContent = wip.props[key] + '';
-        }
-      } else if (key.slice(0,2) === 'on') {
-        const eventName = key.slice(2).toLocaleLowerCase();
-        wip.stateNode.addEventListener(eventName,wip.props[key])
-      } else {
-        wip.stateNode[key] = wip.props[key];
-      }
-    })
+    updateNode(wip.stateNode, {}, wip.props);
   }
   reconcilerChildren(wip.props.children, wip);
 }

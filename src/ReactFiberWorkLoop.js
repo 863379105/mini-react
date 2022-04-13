@@ -5,7 +5,7 @@ import {
   updateHostComponent,
   updateHostTextComponent
 } from "./ReactFiberReconciler";
-import { Placement, Update, isStringOrNumber } from "./utils";
+import { Placement, Update, updateNode } from "./utils";
 import {
   ClassComponent,
   Fragment,
@@ -30,7 +30,7 @@ function performUnitOfWork() {
     case HostComponent:
       updateHostComponent(wip);
       break;
-    case FunctionComponent: 
+    case FunctionComponent:
       updateFunctionComponet(wip);
       break;
     case ClassComponent:
@@ -40,7 +40,7 @@ function performUnitOfWork() {
       updateHostTextComponent(wip);
       break;
     case Fragment:
-      updateFragmentComponent(wip)
+      updateFragmentComponent(wip);
       break;
     default:
       break;
@@ -76,8 +76,8 @@ function commitRoot() {
   commitWorker(wipRoot);
   wipRoot = null;
 }
-
 function commitWorker(wip) {
+
   if (!wip) return;
   // 1. update self
   const { flags, stateNode, props } = wip;
@@ -87,19 +87,7 @@ function commitWorker(wip) {
   }
   if (flags & Update && stateNode) {
     //TODO: update node
-    Object.keys(props).map(key => {
-      //FIXED: event
-      if (key === 'children') {
-        if (isStringOrNumber(props[key])) {
-          stateNode.textContent = props[key] + '';
-        }
-      } else if (key.slice(0,2) === 'on') {
-        // const eventName = key.slice(2).toLocaleLowerCase()
-        // stateNode.addEventListener(eventName,props[key])
-      } else {
-        stateNode[key] = props[key];
-      }
-    })
+    updateNode(stateNode, wip.alternate.props, props)
   }
   // 2. update child
   commitWorker(wip.child);

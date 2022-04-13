@@ -25,16 +25,33 @@ export function isArray(arr) {
   return Array.isArray(arr);
 }
 
-export function updateNode(node,nextVal) {
-  Object.keys(nextVal).forEach(key => {
+export function updateNode(node, prevProps, nextProps) {
+  // delete old attribute
+  Object.keys(prevProps).forEach(key => {
     if (key === 'children') {
-      if(isStringOrNumber(nextVal[key])) {
-        node.textContent = nextVal[key] + '';
-      } else {
-        
+      if(isStringOrNumber(prevProps[key])) {
+        node.textContent = '';
       }
+    } else if(key.slice(0,2) === 'on') {
+        const eventName = key.slice(2).toLocaleLowerCase()
+        node.removeEventListener(eventName,prevProps[key])
     } else {
-      node[key] = nextVal[key];
+      if (!(key in nextProps)) {
+        node.removeAttribute(key);
+      }
+    }
+  })
+  // update new attribute
+  Object.keys(nextProps).forEach(key => {
+    if (key === 'children') {
+      if(isStringOrNumber(nextProps[key])) {
+        node.textContent = nextProps[key] + '';
+      }
+    } else if(key.slice(0,2) === 'on') {
+      const eventName = key.slice(2).toLocaleLowerCase()
+      node.addEventListener(eventName,nextProps[key])
+    } else {
+      node[key] = nextProps[key];
     }
   })
 }
