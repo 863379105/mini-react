@@ -25,7 +25,12 @@ export function updateClassComponet(wip) {
 }
 
 export function updateHostTextComponent(wip) {
-  wip.stateNode = document.createTextNode(wip.props.children);
+  if (wip.stateNode) {
+    wip.stateNode.textContent = wip.props.children;
+  } else {
+    wip.stateNode = document.createTextNode(wip.props.children);
+  }
+  
 }
 
 export function updateFragmentComponent(wip) {
