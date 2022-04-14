@@ -28,19 +28,20 @@ function FunctionComponent(props) {
   let [counter,setCounter] = useState(10);
 
   const changeShow = function() {
-    dispatch({type: 'changeShow'})
+    dispatch({type: 'changeShow'});
   }
   const addCounter = function() {
-    dispatch({type: 'addCounter'})
+    dispatch({type: 'addCounter'});
   }
 
   return (
     <div>
       <h1 className={state.show ? 'font-bg-red' : 'font-bg-blue'}>FunctionComponent</h1>
       <p>{des}</p>
-      <button onClick={changeShow}>changeShow</button>
-      <button onClick={addCounter}>addCounter:{state.counter}</button>
+      <button onClick={ changeShow }>changeShow</button>
+      <button onClick={ addCounter }>addCounter:{state.counter}</button>
       <button onClick={ () => {setCounter(++counter)} }>addCounter:{counter}</button>
+      { state.show ? <h2>the tag is mounted</h2> : '' }
     </div>
   )
 }
