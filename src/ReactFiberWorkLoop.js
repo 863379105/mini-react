@@ -83,12 +83,16 @@ function commitWorker(wip) {
   const { flags, stateNode, props } = wip;
   let parentNode = getParentNode(wip);
   if (flags & Placement && stateNode) {
+    //TODO: 存在更新节点位置不对应问题
     parentNode.appendChild(stateNode)
   }
   if (flags & Update && stateNode) {
-    //TODO: update node
     updateNode(stateNode, wip.alternate.props, props)
   }
+  if (wip.deletions) {
+    commitDeletions(wip.deletions, stateNode || parentNode);
+  }
+
   // 2. update child
   commitWorker(wip.child);
   // 3. update sibling
@@ -101,4 +105,18 @@ function  getParentNode(wip) {
     p = p.return
   }
   return p.return.stateNode;
+}
+
+function commitDeletions(deletions, parentNode) {
+  deletions.map(deletion => {
+    parentNode.removeChild(getStateNode(deletion));
+  })
+}
+
+function getStateNode(fiber) {
+  const stateNode = fiber.stateNode;
+  while(!stateNode) {
+    stateNode = fiber.child.stateNode;
+  }
+  return stateNode;
 }

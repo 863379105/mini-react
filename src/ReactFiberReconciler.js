@@ -57,6 +57,9 @@ function reconcilerChildren(children,parent) {
         flags: Update
       })
     }
+    if (!same && oldFiber) {  
+      deleteChild(parent,oldFiber);
+    }
     if (oldFiber) {
       oldFiber = oldFiber.sibling;
     }
@@ -72,4 +75,13 @@ function reconcilerChildren(children,parent) {
 
 function sameNode(a,b) {
   return a && b && a.type === b.type && a.key === b.key
+}
+
+function deleteChild(parent, child) {
+  const deletions = parent.deletions;
+  if (deletions) {
+    deletions.push(child);
+  } else {
+    parent.deletions = [child];
+  }
 }
