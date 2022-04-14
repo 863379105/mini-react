@@ -47,6 +47,10 @@ export function useReducer(reducer,initialState) {
   ]
 }
 
+export function useState(initialState) {
+  return useReducer(null, initialState);
+}
+
 function dispatchReducerAction(fiber, hook, reducer) {
   return function(action) {
     hook.memorizedState = reducer ? reducer(hook.memorizedState, action) : action;
@@ -54,15 +58,4 @@ function dispatchReducerAction(fiber, hook, reducer) {
     fiber.sibling = null;
     schedulerUpdateOnFiber(fiber);
   }
-}
-
-//TODO: useState hook
-export function useState(initialState) {
-  const setState = function (newState) {
-    console.log("newState",newState);
-  }
-  return [
-    initialState,
-    setState
-  ]
 }
