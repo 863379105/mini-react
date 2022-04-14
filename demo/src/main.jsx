@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { ReactDom, Component, useReducer } from '../which-react';
+import { ReactDom, Component, useReducer, useState } from '../which-react';
 import './index.css'
 
 const initState = {
@@ -22,9 +22,6 @@ const reducer = function(state, action) {
 
   return newState;
 }
-const initState1 = {
-  counter1: 0
-}
 const reducer1 = function(state, action) {
   const newState = { ...state };
 
@@ -39,9 +36,10 @@ const reducer1 = function(state, action) {
   return newState;
 }
 function FunctionComponent(props) {
-  const { des } = props
-  let [state,dispatch] = useReducer(reducer, initState)
-  let [state1,dispatch1] = useReducer(reducer1, initState1)
+  const { des } = props;
+  let [state,dispatch] = useReducer(reducer, initState);
+  let [counter,setCounter] = useState(10);
+
   const changeShow = function() {
     dispatch({type: 'changeShow'})
   }
@@ -49,7 +47,7 @@ function FunctionComponent(props) {
     dispatch({type: 'addCounter'})
   }
   const addCounter1 = function() {
-    dispatch1({type: 'addCounter1'})
+    setCounter(++counter);
   }
   return (
     <div>
@@ -57,7 +55,7 @@ function FunctionComponent(props) {
       <p>{des}</p>
       <button onClick={changeShow}>changeShow</button>
       <button onClick={addCounter}>{state.counter}</button>
-      <button onClick={addCounter1}>{state1.counter1}</button>
+      <button onClick={addCounter1}>{counter}</button>
     </div>
   )
 }

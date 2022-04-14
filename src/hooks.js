@@ -55,3 +55,14 @@ function dispatchReducerAction(fiber, hook, reducer) {
     schedulerUpdateOnFiber(fiber);
   }
 }
+
+//TODO: useState hook
+export function useState(initialState) {
+  const setState = function (newState) {
+    console.log("newState",newState);
+  }
+  return [
+    initialState,
+    setState
+  ]
+}
