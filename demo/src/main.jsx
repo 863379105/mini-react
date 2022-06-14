@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import { ReactDom, Component, useReducer, useState } from '../which-react';
+import { ReactDOM, Component, useReducer, useState } from '../which-react';
 import './index.css'
 
 const initState = {
@@ -75,11 +75,11 @@ const jsx =  (
       <h1>vue</h1>
       <p>this is vue</p>
     </div>
-    <FunctionComponent des={'This is a Function Component'} />
+    {/* <FunctionComponent des={'This is a Function Component'} />
     <ClassComponent des={'This is a Class Component'} />
-    <FragmentComponent />
+    <FragmentComponent /> */}
   </div>
 );
 
-const root = ReactDom.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(jsx);
