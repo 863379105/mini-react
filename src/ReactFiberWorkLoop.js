@@ -114,7 +114,7 @@ function commitDeletions(deletions, parentNode) {
 }
 
 function getStateNode(fiber) {
-  const stateNode = fiber.stateNode;
+  let stateNode = fiber.stateNode;
   while(!stateNode) {
     stateNode = fiber.child.stateNode;
   }
