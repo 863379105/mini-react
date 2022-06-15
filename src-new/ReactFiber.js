@@ -1,5 +1,11 @@
 import { isString, Placement } from "./utils";
-
+import {
+  ClassComponent,
+  Fragment,
+  FunctionComponent,
+  HostComponent,
+  HostText,
+} from "./ReactWorkTags";
 
 export function createFiber(vdom, returnFiber) {
   let fiber = {
@@ -20,6 +26,8 @@ export function createFiber(vdom, returnFiber) {
 
   if (isString(type)) {
     fiber.tag = HostComponent;
+  } else {
+    fiber.tag = HostText;
   }
 
   return fiber;
