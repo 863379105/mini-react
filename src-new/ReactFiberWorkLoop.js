@@ -1,8 +1,9 @@
 import { Placement } from "./utils";
 import {
+  FunctionComponent,
   HostComponent
 } from "./ReactWorkTags";
-import { updateHostComponent } from '../src-new/ReactFiberReconciler'
+import { updateFunctionComponet, updateHostComponent } from '../src-new/ReactFiberReconciler'
 
 let workInProgress = null;
 let workInProgressRoot = null;
@@ -21,6 +22,8 @@ function performUnitOfWork() {
     case HostComponent:
       updateHostComponent(workInProgress);
       break;
+    case FunctionComponent:
+      updateFunctionComponet(workInProgress);
     default: 
       break;
   }
@@ -60,14 +63,22 @@ function commitWorker(fiber) {
   // commit self
   if (!fiber) return;
   const { flags, stateNode } = fiber;
-  const parentNode = fiber.return.stateNode;
-  if (flags && Placement) {
+  const parentNode = getParentNode(fiber);
+  if (flags && Placement && stateNode) {
     parentNode.appendChild(stateNode);
   }
   // commit child
   commitWorker(fiber.child);
   // commit sibling
   commitWorker(fiber.sibling)
+}
+
+function getParentNode(fiber) {
+  let p = fiber;
+  while (!p.return.stateNode) {
+    p = p.return;
+  }
+  return p.return.stateNode;
 }
 
 requestIdleCallback(workLoop);

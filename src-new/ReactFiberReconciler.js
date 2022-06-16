@@ -21,6 +21,12 @@ export function updateHostTextComponent(workInProgress) {
 
 }
 
+export function updateFunctionComponet(workInProgress) {
+  const { type, props } = workInProgress;
+  const children = type(props);
+  reconcilerChildren(children, workInProgress);
+}
+
 function reconcilerChildren(children, parent) {
   if (isStringOrNumber(children)) {
     parent.stateNode.textContent += children;

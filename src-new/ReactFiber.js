@@ -1,4 +1,4 @@
-import { isString, Placement } from "./utils";
+import { isFn, isString, Placement } from "./utils";
 import {
   ClassComponent,
   Fragment,
@@ -26,6 +26,8 @@ export function createFiber(vdom, returnFiber) {
 
   if (isString(type)) {
     fiber.tag = HostComponent;
+  } else if (isFn(type)) {
+    fiber.tag = FunctionComponent;
   } else {
     fiber.tag = HostText;
   }
