@@ -1,3 +1,4 @@
+import { renderWithHooks } from "./hooks";
 import { createFiber } from "./ReactFiber";
 import { isStringOrNumber, updateNode, isArray } from "./utils";
 
@@ -22,6 +23,7 @@ export function updateHostTextComponent(workInProgress) {
 }
 
 export function updateFunctionComponet(workInProgress) {
+  renderWithHooks(workInProgress)
   const { type, props } = workInProgress;
   const children = type(props);
   reconcilerChildren(children, workInProgress);
