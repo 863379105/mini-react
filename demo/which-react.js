@@ -3,12 +3,10 @@
 // import ReactDom from '../src/react-dom'
 
 // import ReactDOM from 'react-dom/client'
-import { useReducer, useState, Component } from "react"
+import { useReducer } from "../src-new/React"
 import ReactDOM from '../src-new/react-dom'
 
 export {
-  Component,
   ReactDOM,
-  useReducer,
-  useState
+  useReducer
 }
