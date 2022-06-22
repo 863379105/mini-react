@@ -11,8 +11,17 @@ export function renderWithHooks(workInProgress) {
 
 function updateWorkInProgressHook() {
   let hook;
-  if (false) {
+  const current = currentlyRenderingFiber.alternate;
+  if (current) {
     // triggle hook, update fiber
+    currentlyRenderingFiber.memorizedState = current.memorizedState;
+    if (workInProgressHook) {
+      hook = workInProgressHook.next;
+      workInProgressHook = workInProgressHook.next;
+    } else {
+      workInProgressHook = current.memorizedState;
+      hook = current.memorizedState;
+    }
   } else {
     // init hook, init fiber
     hook = {
