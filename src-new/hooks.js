@@ -1,3 +1,4 @@
+import { schedulerUpdateOnFiber } from "./ReactFiberWorkLoop";
 
 let workInProgressHook = null;
 let currentlyRenderingFiber = null;
@@ -11,16 +12,19 @@ export function renderWithHooks(workInProgress) {
 function updateWorkInProgressHook() {
   let hook;
   if (false) {
-
+    // triggle hook, update fiber
   } else {
+    // init hook, init fiber
     hook = {
       memorizedState: null,
       next: null
     }
     if (workInProgressHook) {
-      workInProgressHook = workInProgressHook.next = hook;
+      workInProgressHook.next = hook;
+      workInProgressHook = hook;
     } else {
-      workInProgressHook = currentlyRenderingFiber.memorizedState = hook;
+      workInProgressHook = hook;
+      currentlyRenderingFiber.memorizedState = hook;
     }
   }
   return hook;
@@ -31,7 +35,7 @@ export function useReducer(reducer, initialState) {
   if (!currentlyRenderingFiber.alternate) {
     hook.memorizedState = initialState;
   }
-  const dispatch = () => {}
+  const dispatch = dispatchReducerAction(reducer, hook, currentlyRenderingFiber);
   return [
     hook.memorizedState,
     dispatch
@@ -42,3 +46,14 @@ export function useState() {
 
 }
 
+function dispatchReducerAction(reducer, hook, fiber) {
+  const dispatch = (action) => {
+    const newState = reducer(hook.memorizedState, action);
+    hook.memorizedState = newState;
+    fiber.alternate = {...fiber};
+    fiber.sibling = null;
+    // update fiber;
+    schedulerUpdateOnFiber(fiber);
+  }
+  return dispatch;
+}
